@@ -3638,5 +3638,13 @@ mod interface_size_tests {
             assert!(app.run("app.interfaceSize", serde_json::json!({"percent": invalid})).is_err());
             assert_eq!(app.ui.settings.interface_size, before);
         }
+        for (persisted, expected) in [(0, 0), (1, 50), (49, 50), (50, 50), (300, 300), (301, 300), (u16::MAX, 300)] {
+            app.ui.settings.interface_size = persisted;
+            let saved = serde_json::to_string(&app.ui).unwrap();
+            app.ui = serde_json::from_str::<UiState>(&saved).unwrap().sanitized();
+            assert_eq!(app.ui.settings.interface_size, expected);
+            let again = serde_json::to_string(&app.ui).unwrap();
+            assert_eq!(serde_json::from_str::<UiState>(&again).unwrap().settings.interface_size, expected);
+        }
     }
 }

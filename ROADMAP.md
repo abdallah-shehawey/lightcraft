@@ -1,5 +1,7 @@
 # LightCraft roadmap
 
+> **Review follow-up (2026-10-26):** Restored nonzero interface sizes are normalized to 50-300 percent before the next save; Auto remains zero. Regression coverage added; parity scores and estimates unchanged.
+
 **Stage: alpha** · next: beta, ~14 points and ~340–600 h away
 
 > **Last reviewed:** 2026-10-10 · **Last updated:** 2026-10-26 · **Change:** trivial (progress log: Settings › Interface size, Auto or 50–300%) · **Target:** Adobe Lightroom Classic 15.5 / Lightroom 9.6
@@ -114,6 +116,8 @@ Ranked toward beta; detail in [docs/roadmap.md](docs/roadmap.md), gaps in [docs/
 
 ## Progress log
 
+- 2026-10-26: Restored nonzero interface sizes are normalized to 50-300 percent before the next save; Auto remains zero. Regression coverage added; scores and estimates unchanged.
+
 - 2026-10-26: Settings › Interface sets an interface size that persists: Auto (follow the display
   scale) or 50–300%, such as 150% or 157%, independent of the monitor's scale; `app.interfaceSize`
   sets it from the control channel.
@@ -194,6 +198,7 @@ Ranked toward beta; detail in [docs/roadmap.md](docs/roadmap.md), gaps in [docs/
 
 | Date | Change | Summary |
 |---|---|---|
+| 2026-10-26 | trivial | Restored nonzero interface sizes are normalized to 50-300 percent before the next save; Auto remains zero. Scores and estimates unchanged. |
 | 2026-10-26 | trivial | Progress log: Settings › Interface size, Auto or 50–300% (`app.interfaceSize`) |
 | 2026-10-22 | minor | Print: Japanese photo and postcard paper sizes (L判, 2L判, KG判, はがき, 往復はがき, 六切, 四切, 名刺) in the page setup, Print dialog and PDF output; headline numbers unchanged |
 | 2026-10-19 | minor | Indonesian interface (`id`): every plain and formats message, plus 69 command labels, locale, menu command and tests; What's New left in English; Localization ~55% → ~64% (mean of the 12 key languages), 8 of 12 present |
