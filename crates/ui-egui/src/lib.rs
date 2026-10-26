@@ -384,6 +384,7 @@ impl QuitPrompt {
 }
 
 pub struct LightcraftApp {
+    applied_interface_size: Option<(u16, f32)>,
     pub(crate) model_setup: model_setup::Pending,
     /// Per-catalog-revision caches of library-wide results the panels show every frame
     /// (expensive on big libraries).
@@ -604,6 +605,7 @@ impl LightcraftApp {
         // AI mask requests run on the model's worker; frames apply their results (never wait)
         session.segmenter.background = true;
         Self {
+            applied_interface_size: None,
             session,
             ui: UiState::default(),
             services,
@@ -1882,6 +1884,17 @@ impl LightcraftApp {
     /// hidden, from `Context::run_logic`. It may read the refreshed viewport fields only: never
     /// `i.time`, events, keys or dropped files.
     pub fn logic(&mut self, ctx: &egui::Context) {
+        let percent = self.ui.settings.interface_size;
+        let native = ctx.native_pixels_per_point().filter(|s| s.is_finite() && *s > 0.0).unwrap_or(1.0);
+        let zoom = if percent == 0 { 1.0 } else { f32::from(percent.clamp(50, 300)) / (100.0 * native) };
+        if self.applied_interface_size != Some((percent, native)) {
+            // Auto keeps the host's transient zoom (including headless/control views). Only an
+            // explicit preference, or returning from one to Auto, changes that zoom here.
+            if percent != 0 || self.applied_interface_size.is_some_and(|(previous, _)| previous != 0) {
+                ctx.set_zoom_factor(zoom);
+            }
+            self.applied_interface_size = Some((percent, native));
+        }
         i18n::set_language(self.ui.language);
         // The fork's AccessKit root language and bidi runs follow the locale; presentation only.
         // Compare against the cached string: `Context::language()` allocates on every call, and
@@ -3589,3 +3602,35 @@ mod tests_model_setup;
 
 #[cfg(test)]
 mod tests_docking_acceptance;
+
+#[cfg(test)]
+mod interface_size_tests {
+    use super::*;
+
+    #[test]
+    fn interface_size_survives_restart_and_display_scale_changes() {
+        let mut app = LightcraftApp::new(lightcraft_engine::Session::with_demo(), Services::default());
+        let ctx = egui::Context::default();
+        for native in [1.0, 1.5, 2.0] {
+            for percent in [0, 100, 150, 157, 200] {
+                app.run("app.interfaceSize", serde_json::json!({"percent": percent})).unwrap();
+                let saved = serde_json::to_string(&app.ui).unwrap();
+                app.ui = serde_json::from_str(&saved).unwrap();
+                let mut input = egui::RawInput::default();
+                input.viewports.entry(egui::ViewportId::ROOT).or_default().native_pixels_per_point = Some(native);
+                for _ in 0..2 {
+                    let mut output = ctx.run_ui(input.clone(), |ui| app.logic(ui.ctx()));
+                    output.textures_delta.clear();
+                }
+                let expected = if percent == 0 { native } else { percent as f32 / 100.0 };
+                assert!((ctx.pixels_per_point() - expected).abs() < 0.001);
+                assert_eq!(app.ui.settings.interface_size, percent);
+            }
+        }
+        for invalid in [serde_json::json!(-1), serde_json::json!(301), serde_json::json!(1.5), serde_json::json!("150"), serde_json::Value::Null] {
+            let before = app.ui.settings.interface_size;
+            assert!(app.run("app.interfaceSize", serde_json::json!({"percent": invalid})).is_err());
+            assert_eq!(app.ui.settings.interface_size, before);
+        }
+    }
+}

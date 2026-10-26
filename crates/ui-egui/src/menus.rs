@@ -262,6 +262,7 @@ pub const UI_COMMANDS: &[UiCommand] = &[
     ("app.clearRecentLibraries", "Clear Recent Libraries", None, ""),
     // Settings ▸ Display
     ("app.displayProfile", "Display Profile", None, ""),
+    ("app.interfaceSize", "Interface size", None, ""),
     ("app.about", "About LightCraft", None, "Help"),
     ("app.checkForUpdates", "Check for Updates…", None, "Help"),
     ("app.systemInfo", "System Info…", None, "Help"),
@@ -863,6 +864,16 @@ pub fn run_ui_command(app: &mut LightcraftApp, id: &str, p: &Value) -> Option<Re
         "app.recentLibraries" => crate::panels::settings::recent_libraries(app, p),
         "app.clearRecentLibraries" => crate::panels::settings::recent_libraries(app, &json!({"clear": true})),
         "app.displayProfile" => crate::panels::settings::display_profile(app, p),
+        "app.interfaceSize" => {
+            let percent = p.get("percent").and_then(Value::as_u64).filter(|p| *p == 0 || (50..=300).contains(p));
+            match percent {
+                Some(percent) => {
+                    app.ui.settings.interface_size = percent as u16;
+                    Ok(json!({"percent": percent}))
+                }
+                None => Err("percent must be 0 (Auto) or an integer from 50 to 300".into()),
+            }
+        }
         "file.backupLibrary" | "file.restoreLibrary" => {
             let action = if id == "file.backupLibrary" { app.services.backup_library.as_mut() } else { app.services.restore_library.as_mut() };
             match action {
