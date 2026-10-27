@@ -1,10 +1,12 @@
 # LightCraft roadmap
 
+> **Review follow-up (2026-10-27):** `ui.set` accepts interface size zero (Auto) or integer percentages from 50 through 300, matching `app.interfaceSize`. Invalid control patches leave every preference unchanged. Scores and estimates unchanged.
+
 > **Review follow-up (2026-10-26):** Restored nonzero interface sizes are normalized to 50-300 percent before the next save; Auto remains zero. Regression coverage added; parity scores and estimates unchanged.
 
 **Stage: alpha** · next: beta, ~14 points and ~340–600 h away
 
-> **Last reviewed:** 2026-10-10 · **Last updated:** 2026-10-26 · **Change:** trivial (progress log: Settings › Interface size, Auto or 50–300%) · **Target:** Adobe Lightroom Classic 15.5 / Lightroom 9.6
+> **Last reviewed:** 2026-10-10 · **Last updated:** 2026-10-27 · **Change:** trivial (control interface-size validation; progress log: Settings › Interface size, Auto or 50–300%) · **Target:** Adobe Lightroom Classic 15.5 / Lightroom 9.6
 
 One-page summary of how close LightCraft is to Adobe Lightroom. Agents: read this, then pick work
 from [docs/gaps.md](docs/gaps.md). The full assessment, method and evidence are in
@@ -198,6 +200,7 @@ Ranked toward beta; detail in [docs/roadmap.md](docs/roadmap.md), gaps in [docs/
 
 | Date | Change | Summary |
 |---|---|---|
+| 2026-10-27 | trivial | Validate `ui.set` interface-size input atomically with the same integer range as `app.interfaceSize`; estimates unchanged |
 | 2026-10-26 | trivial | Restored nonzero interface sizes are normalized to 50-300 percent before the next save; Auto remains zero. Scores and estimates unchanged. |
 | 2026-10-26 | trivial | Progress log: Settings › Interface size, Auto or 50–300% (`app.interfaceSize`) |
 | 2026-10-22 | minor | Print: Japanese photo and postcard paper sizes (L判, 2L判, KG判, はがき, 往復はがき, 六切, 四切, 名刺) in the page setup, Print dialog and PDF output; headline numbers unchanged |

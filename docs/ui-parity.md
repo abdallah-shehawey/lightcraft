@@ -1,8 +1,10 @@
 # UI parity
 
+> **Review follow-up (2026-10-27):** `ui.set` accepts interface size zero (Auto) or integer percentages from 50 through 300, matching `app.interfaceSize`. Invalid control patches leave every preference unchanged. Scores and estimates unchanged.
+
 > **Review follow-up (2026-10-26):** Restored nonzero interface sizes are normalized to 50-300 percent before the next save; Auto remains zero. Regression coverage added; parity scores and estimates unchanged.
 
-> **Last reviewed:** 2026-10-11 · **Last updated:** 2026-10-26 · **Change:** trivial (Settings › Interface size, Auto or 50–300%) · **Target:** Adobe Lightroom Classic 15.5 / Lightroom 9.6
+> **Last reviewed:** 2026-10-11 · **Last updated:** 2026-10-27 · **Change:** trivial (control interface-size validation; Settings › Interface size, Auto or 50–300%) · **Target:** Adobe Lightroom Classic 15.5 / Lightroom 9.6
 
 How LightCraft's interaction compares with Lightroom's: views, panels, tools and handles, modifier
 keys, shortcuts, zoom, context menus and feel. Rows for individual menu items and shortcuts live in
@@ -154,6 +156,7 @@ establish OS keyboard delivery or cross-platform acceptance.
 
 | Date | Change | Summary |
 |---|---|---|
+| 2026-10-27 | trivial | Validate `ui.set` interface-size input atomically with the same integer range as `app.interfaceSize`; estimates unchanged |
 | 2026-10-26 | trivial | Restored nonzero interface sizes are normalized to 50-300 percent before the next save; Auto remains zero. Scores and estimates unchanged. |
 | 2026-10-26 | trivial | Settings › Interface: a persistent interface size, Auto or 50–300% (`app.interfaceSize`) |
 | 2026-10-24 | patch | KEYC-METADATA: ⌘⌥⇧C / ⌘⌥⇧V (Ctrl+Alt+Shift+C / V on Windows and Linux) copy and paste metadata |

@@ -150,6 +150,8 @@ Auto → Light → Dark → Auto, like the top bar's `icon:appearance` button) a
 Both reply `{mode, darkTheme, lightTheme}`; the same values are `settings.appearanceMode`,
 `settings.darkTheme` and `settings.lightTheme` in `ui.set`. Auto follows the system (on Linux the
 XDG desktop portal, watched for changes rather than polled) and is dark when the system says nothing.
+Interface size is `app.interfaceSize {percent}` through `engine.execute`, or `ui.set {"settings": {"interfaceSize": 157}}`. Both accept integer zero (Auto) or 50 through 300. A malformed or out-of-range `ui.set` value rejects the entire patch and leaves preferences unchanged; omitting the field preserves its current value.
+
 Mask brushing uses the UI command `tool.brush` through `engine.execute`. With `{}` it activates
 painting on the current mask. `{"new": true}` creates a separate brush mask; `{"op": "add"}` or
 `{"op": "subtract"}` appends a brush component to the selected mask. Creating either starts in
