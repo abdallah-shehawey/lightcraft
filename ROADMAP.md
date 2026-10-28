@@ -1,7 +1,7 @@
 # LightCraft roadmap
 
 > **Review follow-up (2026-10-27):** `ui.set` accepts interface size zero (Auto) or integer percentages from 50 through 300, matching `app.interfaceSize`. Invalid control patches leave every preference unchanged. Scores and estimates unchanged.
-
+>
 > **Review follow-up (2026-10-26):** Restored nonzero interface sizes are normalized to 50-300 percent before the next save; Auto remains zero. Regression coverage added; parity scores and estimates unchanged.
 
 **Stage: alpha** · next: beta, ~14 points and ~340–600 h away
